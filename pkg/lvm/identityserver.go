@@ -17,9 +17,29 @@ limitations under the License.
 package lvm
 
 import (
-	"github.com/kubernetes-csi/drivers/pkg/csi-common"
+	"fmt"
+
+	"github.com/container-storage-interface/spec/lib/go/csi"
+	csicommon "github.com/kubernetes-csi/drivers/pkg/csi-common"
+	"golang.org/x/net/context"
 )
 
 type identityServer struct {
 	*csicommon.DefaultIdentityServer
+}
+
+const PluginName = "csi-lvmplugin"
+
+func (is *identityServer) GetPluginInfo(ctx context.Context, req *csi.GetPluginInfoRequest) (*csi.GetPluginInfoResponse, error) {
+	fmt.Println("!!!! buka in OUR get plugin info")
+	resp := &csi.GetPluginInfoResponse{
+		Name: PluginName,
+		//VendorVersion: "notImportant",
+	}
+
+	// d.log.WithFields(logrus.Fields{
+	// 	"response": resp,
+	// 	"method":   "get_plugin_info",
+	// }).Info("get plugin info called")
+	return resp, nil
 }
