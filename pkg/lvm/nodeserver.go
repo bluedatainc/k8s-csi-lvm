@@ -22,7 +22,6 @@ import (
 	"os"
 	"path/filepath"
 
-	//"github.com/docker/docker/pkg/mount"
 	"golang.org/x/net/context"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes"
@@ -49,162 +48,7 @@ func (ns *nodeServer) GetNodeID() string {
 	return ns.nodeID
 }
 
-//todo: revisit!!!
-const maxVolumesPerNode = 10
-
-func (ns *nodeServer) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoRequest) (*csi.NodeGetInfoResponse, error) {
-	fmt.Println("!!!! buka in NodeGetInfo cp1")
-	glog.V(3).Infof("method node_get_info is called")
-	return &csi.NodeGetInfoResponse{
-		NodeId:            ns.nodeID,
-		MaxVolumesPerNode: maxVolumesPerNode,
-
-		// make sure that the driver works on this particular region only
-		// AccessibleTopology: &csi.Topology{
-		// 	Segments: map[string]string{
-		// 		"region": ns.region,
-		// 	},
-		// },
-	}, nil
-}
-
-// // GetPluginInfo returns metadata of the plugin
-// func (ns *nodeServer) GetPluginInfo(ctx context.Context, req *csi.GetPluginInfoRequest) (*csi.GetPluginInfoResponse, error) {
-// 	fmt.Println("!!!! buka in get plugin info")
-// 	resp := &csi.GetPluginInfoResponse{
-// 		Name: "csi-lvmplugin",
-// 		//VendorVersion: "notImportant",
-// 	}
-
-// 	// d.log.WithFields(logrus.Fields{
-// 	// 	"response": resp,
-// 	// 	"method":   "get_plugin_info",
-// 	// }).Info("get plugin info called")
-// 	return resp, nil
-// }
-
-// GetPluginCapabilities returns available capabilities of the plugin
-func (ns *nodeServer) GetPluginCapabilities(ctx context.Context, req *csi.GetPluginCapabilitiesRequest) (*csi.GetPluginCapabilitiesResponse, error) {
-	resp := &csi.GetPluginCapabilitiesResponse{
-		Capabilities: []*csi.PluginCapability{
-			{
-				Type: &csi.PluginCapability_Service_{
-					Service: &csi.PluginCapability_Service{
-						Type: csi.PluginCapability_Service_CONTROLLER_SERVICE,
-					},
-				},
-			},
-			//{
-			// Type: &csi.PluginCapability_Service_{
-			// 	Service: &csi.PluginCapability_Service{
-			// 		Type: csi.PluginCapability_Service_VOLUME_ACCESSIBILITY_CONSTRAINTS,
-			// 	},
-			// },
-			//},
-		},
-	}
-
-	fmt.Println("!!! buka get plugin capabilities called")
-
-	// d.log.WithFields(logrus.Fields{
-	// 	"response": resp,
-	// 	"method":   "get_plugin_capabilities",
-	// }).Info("get plugin capabitilies called")
-	return resp, nil
-}
-
-// Probe returns the health and readiness of the plugin
-func (ns *nodeServer) Probe(ctx context.Context, req *csi.ProbeRequest) (*csi.ProbeResponse, error) {
-	//d.log.WithField("method", "probe").Info("probe called")
-	fmt.Println("!!! buka method Probe called")
-
-	//d.readyMu.Lock()
-	//defer d.readyMu.Unlock()
-
-	return &csi.ProbeResponse{
-		//Ready: &wrappers.BoolValue{
-		//	Value: d.ready,
-		//},
-	}, nil
-}
-
-// GetPluginCapabilities returns available capabilities of the plugin
-// func (d *Driver) GetPluginCapabilities(ctx context.Context, req *csi.GetPluginCapabilitiesRequest) (*csi.GetPluginCapabilitiesResponse, error) {
-// 	resp := &csi.GetPluginCapabilitiesResponse{
-// 		Capabilities: []*csi.PluginCapability{
-// 			{
-// 				Type: &csi.PluginCapability_Service_{
-// 					Service: &csi.PluginCapability_Service{
-// 						Type: csi.PluginCapability_Service_CONTROLLER_SERVICE,
-// 					},
-// 				},
-// 			},
-// 			{
-// 				Type: &csi.PluginCapability_Service_{
-// 					Service: &csi.PluginCapability_Service{
-// 						Type: csi.PluginCapability_Service_VOLUME_ACCESSIBILITY_CONSTRAINTS,
-// 					},
-// 				},
-// 			},
-// 		},
-// 	}
-
-// 	d.log.WithFields(logrus.Fields{
-// 		"response": resp,
-// 		"method":   "get_plugin_capabilities",
-// 	}).Info("get plugin capabitilies called")
-// 	return resp, nil
-// }
-
-// // Probe returns the health and readiness of the plugin
-// func (d *Driver) Probe(ctx context.Context, req *csi.ProbeRequest) (*csi.ProbeResponse, error) {
-// 	d.log.WithField("method", "probe").Info("probe called")
-// 	d.readyMu.Lock()
-// 	defer d.readyMu.Unlock()
-
-// 	return &csi.ProbeResponse{
-// 		Ready: &wrappers.BoolValue{
-// 			Value: d.ready,
-// 		},
-// 	}, nil
-// }
-
-// GetPluginInfo returns metadata of the plugin
-// func (d *Driver) GetPluginInfo(ctx context.Context, req *csi.GetPluginInfoRequest) (*csi.GetPluginInfoResponse, error) {
-// 	resp := &csi.GetPluginInfoResponse{
-// 		Name:          DriverName,
-// 		VendorVersion: version,
-// 	}
-
-// 	d.log.WithFields(logrus.Fields{
-// 		"response": resp,
-// 		"method":   "get_plugin_info",
-// 	}).Info("get plugin info called")
-// 	return resp, nil
-//}
-
-// NodeGetInfo returns the supported capabilities of the node server. This
-// should eventually return the droplet ID if possible. This is used so the CO
-// knows where to place the workload. The result of this function will be used
-// by the CO in ControllerPublishVolume.
-// func (d *Driver) NodeGetInfo(ctx context.Context, req *csi.NodeGetInfoRequest) (*csi.NodeGetInfoResponse, error) {
-// 	d.log.WithField("method", "node_get_info").Info("node get info called")
-// 	return &csi.NodeGetInfoResponse{
-// 		NodeId:            d.nodeId,
-// 		MaxVolumesPerNode: maxVolumesPerNode,
-
-// 		// make sure that the driver works on this particular region only
-// 		AccessibleTopology: &csi.Topology{
-// 			Segments: map[string]string{
-// 				"region": d.region,
-// 			},
-// 		},
-// 	}, nil
-// }
-
 func (ns *nodeServer) createVolume(ctx context.Context, volumeId string) (*v1.PersistentVolume, error) {
-	fmt.Println("!!!!!! buka in createVolume !!!!!!!!!!!!!!!!!!!")
-
 	pv, err := getPV(ns.client, volumeId)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("Failed to get pv by volumeId %s: %s", volumeId, err))
@@ -344,7 +188,6 @@ func (ns *nodeServer) NodeUnpublishVolume(ctx context.Context, req *csi.NodeUnpu
 
 	//TODO: double check!!!
 	err = mount.New("").Unmount(targetPath)
-	//vf err = util.UnmountPath(req.GetTargetPath(), mount.New(""))
 	if err != nil {
 		return nil, status.Error(codes.Internal, err.Error())
 	}

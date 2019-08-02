@@ -14,12 +14,8 @@ import (
 
 const (
 	lvmNodeAnnKey = "lvm/node"
-
-	//todo: check if this is right !!!!!!
-	//NodeLabelKey = apis.AnnotationProvidedIPAddr
-	NodeLabelKey = v1.LabelHostname
-
-	lvmdPort = "1736"
+	NodeLabelKey  = v1.LabelHostname
+	lvmdPort      = "1736"
 )
 
 func getLVMDAddr(client kubernetes.Interface, node string) (string, error) {
