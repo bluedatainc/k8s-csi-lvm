@@ -42,6 +42,8 @@ type controllerServer struct {
 	vgName string
 }
 
+//need this to satisfy the csi.ControllerServer interface.
+//for some reason csicommon.DefaultControllerServer does not implement this function.
 func (cs *controllerServer) ControllerExpandVolume(ctx context.Context, req *csi.ControllerExpandVolumeRequest) (*csi.ControllerExpandVolumeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, fmt.Sprintf("ExpandVolume is not yet implemented"))
 }
