@@ -26,7 +26,7 @@ if [ $res -ne 0 ]; then
 fi
 
 echo "Creating volume group k8s on $DEVS"
-vgcreate k8s $DEVS
+vgcreate csilvm-vg $DEVS
 
 # only on master
 # kubectl create -f deploy

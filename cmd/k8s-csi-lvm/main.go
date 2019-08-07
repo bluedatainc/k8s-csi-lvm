@@ -35,7 +35,7 @@ var (
 	endpoint   = flag.String("endpoint", "unix://tmp/csi.sock", "CSI endpoint")
 	driverName = flag.String("drivername", "k8s-csi-lvm", "name of the driver")
 	nodeID     = flag.String("nodeid", "", "node id")
-	vgName     = flag.String("vgname", "k8s", "volume group name")
+	vgName     = flag.String("vgname", "csilvm-vg", "volume group name")
 	kubeconfig = flag.String("kubeconfig", "", "Absolute path to the kubeconfig file. Required only when running out of cluster.")
 )
 
