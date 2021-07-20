@@ -25,9 +25,9 @@ import (
 	"google.golang.org/grpc/status"
 	"k8s.io/client-go/kubernetes"
 
-	"github.com/container-storage-interface/spec/lib/go/csi/v0"
+	"github.com/container-storage-interface/spec/lib/go/csi"
 	"github.com/golang/glog"
-	"github.com/kubernetes-csi/drivers/pkg/csi-common"
+	csicommon "github.com/kubernetes-csi/drivers/pkg/csi-common"
 	"github.com/wavezhang/k8s-csi-lvm/pkg/lvmd"
 )
 
@@ -40,6 +40,12 @@ type controllerServer struct {
 	*csicommon.DefaultControllerServer
 	client kubernetes.Interface
 	vgName string
+}
+
+//need this to satisfy the csi.ControllerServer interface.
+//for some reason csicommon.DefaultControllerServer does not implement this function.
+func (cs *controllerServer) ControllerExpandVolume(ctx context.Context, req *csi.ControllerExpandVolumeRequest) (*csi.ControllerExpandVolumeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, fmt.Sprintf("ExpandVolume is not yet implemented"))
 }
 
 func (cs *controllerServer) CreateVolume(ctx context.Context, req *csi.CreateVolumeRequest) (*csi.CreateVolumeResponse, error) {
@@ -59,9 +65,9 @@ func (cs *controllerServer) CreateVolume(ctx context.Context, req *csi.CreateVol
 
 	response := &csi.CreateVolumeResponse{
 		Volume: &csi.Volume{
-			Id:            volumeId,
+			VolumeId:      volumeId,
 			CapacityBytes: req.GetCapacityRange().GetRequiredBytes(),
-			Attributes:    req.GetParameters(),
+			//vf Attributes:    req.GetParameters(),
 		},
 	}
 	return response, nil

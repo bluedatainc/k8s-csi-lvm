@@ -17,7 +17,7 @@ limitations under the License.
 package lvm
 
 import (
-	"github.com/kubernetes-csi/drivers/pkg/csi-common"
+	csicommon "github.com/kubernetes-csi/drivers/pkg/csi-common"
 )
 
 type identityServer struct {

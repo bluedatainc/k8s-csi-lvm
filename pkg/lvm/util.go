@@ -6,16 +6,15 @@ import (
 	"os/exec"
 	"strings"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/pkg/kubelet/apis"
 	utilnode "k8s.io/kubernetes/pkg/util/node"
 )
 
 const (
 	lvmNodeAnnKey = "lvm/node"
-	NodeLabelKey  = apis.LabelHostname
+	NodeLabelKey  = v1.LabelHostname
 	lvmdPort      = "1736"
 )
 

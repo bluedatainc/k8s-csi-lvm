@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # run on master only
-VGNAME=k8s
+VGNAME=csilvm-vg
 kubectl proxy &
 nodes=`kubectl get nodes |grep -v NAME |awk '{print $1}'`
 for n in $nodes; do
